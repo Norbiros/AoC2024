@@ -3,9 +3,9 @@ package main
 import (
 	_ "embed"
 	"fmt"
+	"github.com/Norbiros/AoC2024/utils"
 	"math"
 	"sort"
-	"strconv"
 	"strings"
 )
 
@@ -18,17 +18,10 @@ func main() {
 	for _, line := range strings.Split(input, "\n") {
 		var lineNumbers = strings.Split(line, "   ")
 
-		parsedNumber1, err := strconv.Atoi(lineNumbers[0])
-		if err != nil {
-			panic("Expected number")
-		}
+		parsedNumberOne := utils.ToInt(lineNumbers[0])
+		parsedNumberTwo := utils.ToInt(lineNumbers[1])
 
-		parsedNumber2, err := strconv.Atoi(lineNumbers[1])
-		if err != nil {
-			panic("Expected number")
-		}
-
-		processedInput = append(processedInput, []int{parsedNumber1, parsedNumber2})
+		processedInput = append(processedInput, []int{parsedNumberOne, parsedNumberTwo})
 	}
 
 	fmt.Println("Solving \"Day 1: Historian Hysteria\"...")
