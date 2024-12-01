@@ -26,3 +26,5 @@ go.work.sum
 
 # editor
 .idea
+
+day_*/input.txt
