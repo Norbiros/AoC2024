@@ -49,6 +49,7 @@ func main() {
 		log.Fatal("Error writing to file:", err)
 	}
 
+	template = strings.Replace(template, "//go:build ignore\n\n", "", 1)
 	err = writeToFile(filepath.Join(prefixedDay, "main.go"), template)
 	if err != nil {
 		log.Fatal("Error writing to file:", err)
