@@ -26,35 +26,50 @@ func main() {
 	fmt.Println("Part 2 result", partTwo(processedInput))
 }
 
-func isSafe(values []int, startingValue int) int {
-	previousValue := values[0]
-	isIncreasing := values[startingValue] > values[0]
+// I know it's overkill for this task,
+// but i wanted to solve it in O(N),
+// so I used *dynamic programming*!
+func dpCheck(height []int) int {
+	n := len(height)
 
-	errors := 0
+	increasing := make([]int, n)
+	decreasing := make([]int, n)
+	for i := range increasing {
+		increasing[i] = math.MaxInt32
+		decreasing[i] = math.MaxInt32
+	}
+	increasing[0], decreasing[0] = 0, 0
 
-	for _, value := range values[startingValue:] {
-		difference := int(math.Abs(float64(value - previousValue)))
-		if difference > 3 || difference < 1 {
-			errors += 1
-			continue
+	for i := 1; i < n; i++ {
+		if diff := utils.Abs(height[i] - height[i-1]); diff >= 1 && diff <= 3 {
+			if height[i] > height[i-1] {
+				increasing[i] = min(increasing[i], increasing[i-1])
+			} else if height[i] < height[i-1] {
+				decreasing[i] = min(decreasing[i], decreasing[i-1])
+			}
 		}
 
-		if isIncreasing != (value > previousValue) {
-			errors += 1
-			continue
-		}
+		if i > 1 {
+			if diff := utils.Abs(height[i] - height[i-2]); diff < 1 || diff > 3 {
+				continue
+			}
 
-		previousValue = value
+			if height[i] > height[i-2] {
+				increasing[i] = min(increasing[i], increasing[i-2]+1)
+			} else if height[i] < height[i-2] {
+				decreasing[i] = min(decreasing[i], decreasing[i-2]+1)
+			}
+		}
 	}
 
-	return errors
+	return min(increasing[n-1], decreasing[n-1])
 }
 
 func partOne(input [][]int) int {
 	var result int
 
 	for _, report := range input {
-		if isSafe(report, 1) == 0 {
+		if dpCheck(report) == 0 {
 			result += 1
 		}
 	}
@@ -67,12 +82,13 @@ func partTwo(input [][]int) int {
 
 	for _, report := range input {
 		// Probably there's a better solution to this,
-		// But I just implemented specific checks for edge cases 0 and 1
-		isSafeWhenZeroRemoved := isSafe(report, 2) == 0
-		isSafeWhenOneRemoved := isSafe(report[1:], 1) == 0
-		isSafeInOtherCases := isSafe(report, 1) <= 1
+		// But I just implemented specific checks for edge cases
+		isSafeWhenFirstValueRemoved := dpCheck(report[1:]) == 0
+		isSafeWhenLastValueRemoved := dpCheck(report[:len(report)-1]) == 0
+		otherCasesResult := dpCheck(report)
+		isSafeInOtherCases := otherCasesResult == 0 || otherCasesResult == 1
 
-		if isSafeWhenZeroRemoved || isSafeWhenOneRemoved || isSafeInOtherCases {
+		if isSafeWhenFirstValueRemoved || isSafeWhenLastValueRemoved || isSafeInOtherCases {
 			result += 1
 		}
 	}

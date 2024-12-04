@@ -11,3 +11,10 @@ func ToInt(arg string) int {
 	}
 	return val
 }
+
+func Abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
