@@ -32,14 +32,10 @@ func parseCoordinates(input string) []int {
 	return []int{utils.ToInt(numbers[0]), utils.ToInt(numbers[1])}
 }
 
-type Pair struct {
-	First, Second int
-}
-
 func partOne(input []string, n int) int {
 	const width = 101
 	const height = 103
-	robots := make(map[Pair]int)
+	robots := make(map[utils.Pair]int)
 
 	result := make(map[int]int, 4)
 	for _, line := range input {
@@ -71,12 +67,12 @@ func partOne(input []string, n int) int {
 			result[3] += 1
 		}
 
-		robots[Pair{First: coordinates[0], Second: coordinates[1]}] += 1
+		robots[utils.Pair{First: coordinates[0], Second: coordinates[1]}] += 1
 	}
 
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
-			if robots[Pair{First: x, Second: y}] != 0 {
+			if robots[utils.Pair{First: x, Second: y}] != 0 {
 				fmt.Print("X")
 			} else {
 				fmt.Print(".")

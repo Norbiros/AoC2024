@@ -4,6 +4,10 @@ import (
 	"strconv"
 )
 
+type Pair struct {
+	First, Second int
+}
+
 func ToInt(arg string) int {
 	var val, err = strconv.Atoi(arg)
 	if err != nil {

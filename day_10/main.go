@@ -17,16 +17,12 @@ func main() {
 	fmt.Println("Part 2 result", partTwo(inputLines))
 }
 
-type Pair struct {
-	First, Second int
-}
-
 func partOne(input []string) int {
 	var result int
 	for y, row := range input {
 		for x, char := range row {
 			if char == '0' {
-				visitedPlaces := make(map[Pair]bool)
+				visitedPlaces := make(map[utils.Pair]bool)
 				result += findMore(input, x, y, visitedPlaces, -1, -1, false)
 			}
 		}
@@ -35,12 +31,12 @@ func partOne(input []string) int {
 	return result
 }
 
-func findMore(input []string, x, y int, visitedPlaces map[Pair]bool, previousValue int, previousPreviousValue int, isPartTwo bool) int {
+func findMore(input []string, x, y int, visitedPlaces map[utils.Pair]bool, previousValue int, previousPreviousValue int, isPartTwo bool) int {
 	if x < 0 || x >= len(input[0]) || y < 0 || y >= len(input) {
 		return 0
 	}
 
-	if visitedPlaces[Pair{x, y}] {
+	if visitedPlaces[utils.Pair{First: x, Second: y}] {
 		return 0
 	}
 
@@ -59,7 +55,7 @@ func findMore(input []string, x, y int, visitedPlaces map[Pair]bool, previousVal
 		return 0
 	}
 
-	visitedPlaces[Pair{x, y}] = true
+	visitedPlaces[utils.Pair{First: x, Second: y}] = true
 
 	result := 0
 	if currentValue == 9 {
@@ -72,7 +68,7 @@ func findMore(input []string, x, y int, visitedPlaces map[Pair]bool, previousVal
 	result += findMore(input, x, y-1, visitedPlaces, currentValue, previousValue, isPartTwo)
 
 	if isPartTwo {
-		visitedPlaces[Pair{x, y}] = false
+		visitedPlaces[utils.Pair{First: x, Second: y}] = false
 	}
 
 	return result
@@ -84,7 +80,7 @@ func partTwo(input []string) int {
 	for y, row := range input {
 		for x, char := range row {
 			if char == '0' {
-				visitedPlaces := make(map[Pair]bool)
+				visitedPlaces := make(map[utils.Pair]bool)
 				result += findMore(input, x, y, visitedPlaces, -1, -1, true)
 			}
 		}
